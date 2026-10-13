@@ -5,21 +5,28 @@ A super simple FastAPI application that allows students to view and sign up
 for extracurricular activities at Mergington High School.
 """
 
-from fastapi import FastAPI, HTTPException
+# FastAPI provides the application and structured HTTP error classes.
+from fastapi import FastAPI, HTTPException, Query
+# StaticFiles serves the browser-based frontend from the local static folder.
 from fastapi.staticfiles import StaticFiles
+# RedirectResponse sends visitors from the API root to the frontend page.
 from fastapi.responses import RedirectResponse
-import os
-from pathlib import Path
+import os  # Builds a platform-independent path to the static directory.
+from pathlib import Path  # Locates files relative to this Python module.
 
+# Create the API application and expose descriptive metadata in its generated docs.
 app = FastAPI(title="Mergington High School API",
               description="API for viewing and signing up for extracurricular activities")
 
-# Mount the static files directory
+# Resolve the directory containing this file so startup works from any working directory.
 current_dir = Path(__file__).parent
+# Make frontend assets available under /static (for example, /static/index.html).
 app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
           "static")), name="static")
 
-# In-memory activity database
+# In-memory activity database. Each activity stores display information, its enrollment
+# limit, and the email addresses of currently registered students. Data resets whenever
+# the application process restarts because it is not persisted to an external database.
 activities = {
     "Chess Club": {
         "category": "Academic & Enrichment",
@@ -87,34 +94,58 @@ activities = {
 }
 
 
+# Route requests for the site root to the static frontend rather than returning API data.
 @app.get("/")
 def root():
+    # Use an HTTP redirect so the browser loads the actual HTML resource and its assets.
     return RedirectResponse(url="/static/index.html")
 
 
+# Return all activities as JSON; FastAPI serializes the nested dictionary automatically.
 @app.get("/activities")
 def get_activities():
     return activities
 
 
-@app.post("/activities/{activity_name}/signup")
-def signup_for_activity(activity_name: str, email: str):
-    """Sign up a student for an activity"""
-    # Validate activity exists
+# Register a student using the activity name in the URL and email as a query parameter.
+@app.post(
+    "/activities/{activity_name}/signup",
+    summary="Register a student for an activity",
+    responses={
+        400: {
+            "description": "The email is invalid, already registered, or the activity is full"
+        },
+        404: {"description": "The activity does not exist"},
+    },
+)
+def signup_for_activity(
+    activity_name: str,
+    email: str = Query(
+        ...,
+        description="The student's @mergington.edu email address",
+        examples=["student@mergington.edu"],
+    ),
+):
+    """Validate and add a student's email to an activity's participant list."""
+    # Reject unknown names before attempting to access the activity dictionary.
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
 
-    # Get the specific activity
+    # Keep a reference to the selected record so its participant list can be updated.
     activity = activities[activity_name]
 
-    # Validate student is using @mergington.edu email
+    # Restrict registration to students using the school's email domain.
     if not email.endswith("@mergington.edu"):
         raise HTTPException(status_code=400, detail="Invalid email domain")
 
-    # Validate student is not already signed up
+    # Prevent duplicate registrations for the same student and activity.
     if email in activity["participants"]:
         raise HTTPException(status_code=400, detail="Student is already signed up")
 
-    # Add student
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is full")
+
+    # Mutate the in-memory list, making the registration visible to later API requests.
     activity["participants"].append(email)
+    # Confirm the successful registration with a human-readable response.
     return {"message": f"Signed up {email} for {activity_name}"}

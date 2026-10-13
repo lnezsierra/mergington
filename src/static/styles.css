@@ -193,6 +193,15 @@ section h3 {
   box-shadow: 0 8px 18px rgba(107, 33, 168, 0.1);
 }
 
+.activity-card-full {
+  cursor: default;
+}
+
+.activity-card-full:hover {
+  box-shadow: none;
+  transform: none;
+}
+
 .activity-card h5 {
   margin-bottom: 10px;
   color: var(--pink-600);
@@ -206,6 +215,13 @@ section h3 {
 .register-button {
   width: 100%;
   margin-top: 16px;
+}
+
+.register-button:disabled {
+  background: #a89eac;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .participants-section {

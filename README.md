@@ -1,16 +1,51 @@
-# Getting Started with GitHub Copilot
+# Mergington High School Activities
 
-<img src="https://octodex.github.com/images/Professortocat_v2.png" align="right" height="200px" />
+A FastAPI web application where Mergington High School students can browse
+extracurricular activities and register with their school email address.
 
-Hey lnezsierra!
+## Registration Flow
 
-Mona here. I'm done preparing your exercise. Hope you enjoy! 💚
+1. Browse the available activities, grouped by category.
+2. Click an activity card or its **Register** button.
+3. Enter the username portion of a `@mergington.edu` email address.
+4. Click **Register** to complete the registration.
 
-Remember, it's self-paced so feel free to take a break! ☕️
+The activity list displays each activity's description, schedule, remaining
+capacity, and currently registered students.
 
-[![](https://img.shields.io/badge/Go%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/lnezsierra/mergington/issues/1)
+## Getting Started
 
----
+1. Install the dependencies:
 
-&copy; 2025 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+   ```bash
+   pip install -r requirements.txt
+   ```
 
+2. Start the development server:
+
+   ```bash
+   uvicorn src.app:app --reload
+   ```
+
+3. Open the application at <http://127.0.0.1:8000>.
+
+API documentation is available at:
+
+- Swagger UI: <http://127.0.0.1:8000/docs>
+- ReDoc: <http://127.0.0.1:8000/redoc>
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/activities` | Return all activities and their registration details |
+| `POST` | `/activities/{activity_name}/signup?email=student@mergington.edu` | Register a student for an activity |
+
+The signup endpoint accepts only `@mergington.edu` email addresses and rejects
+duplicate registrations for the same activity. Registration is unavailable when
+an activity reaches its maximum participant capacity.
+
+## Data Storage
+
+Activities and registrations are stored in memory. All registrations reset when
+the application server restarts.
