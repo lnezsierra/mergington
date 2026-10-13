@@ -3,39 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mergington High School Activities</title>
+    <title>Student Activities Portal | Mergington High School</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header>
-      <h1>Mergington High School</h1>
-      <h2>Extracurricular Activities</h2>
+      <p class="school-name">Mergington High School</p>
+      <h1>Student Activities Portal</h1>
+      <p class="header-subtitle">Discover opportunities. Build community. Get involved.</p>
     </header>
 
     <main>
       <section id="activities-container">
         <h3>Available Activities</h3>
+        <p class="section-instructions">Choose an activity to register.</p>
         <div id="activities-list">
           <!-- Activities will be loaded here -->
           <p>Loading activities...</p>
         </div>
       </section>
 
-      <section id="signup-container">
-        <h3>Sign Up for an Activity</h3>
+      <section id="signup-container" class="hidden" aria-live="polite">
+        <button type="button" id="back-to-activities" class="back-button">
+          &larr; Back to activities
+        </button>
+        <p class="signup-eyebrow">Registering for</p>
+        <h3 id="selected-activity-name"></h3>
         <form id="signup-form">
           <div class="form-group">
             <label for="email">Student Email:</label>
-            <input type="email" id="email" required placeholder="your-email@mergington.edu" />
+            <div class="email-input">
+              <input
+                type="text"
+                id="email"
+                required
+                placeholder="your-email"
+                autocomplete="username"
+                inputmode="email"
+                pattern="[^@\s]+"
+                aria-describedby="email-domain"
+              />
+              <span id="email-domain">@mergington.edu</span>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="activity">Select Activity:</label>
-            <select id="activity" required>
-              <option value="">-- Select an activity --</option>
-              <!-- Activity options will be loaded here -->
-            </select>
-          </div>
-          <button type="submit">Sign Up</button>
+          <input type="hidden" id="activity" />
+          <button type="submit">Register</button>
         </form>
         <div id="message" class="hidden"></div>
       </section>
