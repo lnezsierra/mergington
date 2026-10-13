@@ -5,17 +5,17 @@
 }
 
 :root {
-  --violet-900: #3b0764;
-  --violet-700: #6b21a8;
-  --violet-600: #7e22ce;
-  --violet-100: #f3e8ff;
+  --teal-900: #134e4a;
+  --teal-700: #0f766e;
+  --teal-600: #0d9488;
+  --teal-100: #ccfbf1;
   --pink-600: #db2777;
   --pink-500: #ec4899;
   --pink-100: #fce7f3;
-  --ink: #2e2533;
-  --muted: #6d6172;
+  --ink: #203333;
+  --muted: #617574;
   --surface: #ffffff;
-  --border: #eadcf0;
+  --border: #dce9e7;
 }
 
 body {
@@ -28,7 +28,7 @@ body {
   padding: 24px;
   background:
     radial-gradient(circle at top left, rgba(236, 72, 153, 0.13), transparent 35%),
-    linear-gradient(145deg, #fff8fc 0%, #f8f2ff 100%);
+    linear-gradient(145deg, #fff8fc 0%, #f0fbf9 100%);
 }
 
 header {
@@ -36,10 +36,10 @@ header {
   padding: 48px 24px;
   margin-bottom: 36px;
   overflow: hidden;
-  background: linear-gradient(120deg, var(--violet-900), var(--violet-600) 58%, var(--pink-500));
+  background: linear-gradient(120deg, var(--teal-900), var(--teal-600) 58%, var(--pink-500));
   color: white;
   border-radius: 18px;
-  box-shadow: 0 16px 36px rgba(107, 33, 168, 0.24);
+  box-shadow: 0 16px 36px rgba(15, 118, 110, 0.24);
 }
 
 header h1 {
@@ -80,17 +80,17 @@ section {
   width: 100%;
   max-width: 500px;
   padding: 26px;
-  border: 1px solid rgba(107, 33, 168, 0.1);
+  border: 1px solid rgba(15, 118, 110, 0.1);
   border-radius: 14px;
   background-color: var(--surface);
-  box-shadow: 0 10px 28px rgba(59, 7, 100, 0.09);
+  box-shadow: 0 10px 28px rgba(19, 78, 74, 0.09);
 }
 
 section h3 {
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--pink-100);
-  color: var(--violet-700);
+  color: var(--teal-700);
   font-size: 1.3rem;
 }
 
@@ -107,7 +107,7 @@ section h3 {
   border: 1px solid var(--border);
   border-radius: 12px;
   background: #fffafd;
-  box-shadow: 0 5px 14px rgba(59, 7, 100, 0.06);
+  box-shadow: 0 5px 14px rgba(19, 78, 74, 0.06);
   overflow: hidden;
 }
 
@@ -121,8 +121,8 @@ section h3 {
   justify-content: space-between;
   gap: 12px;
   padding: 15px 18px;
-  background: linear-gradient(110deg, var(--violet-100), var(--pink-100));
-  color: var(--violet-900);
+  background: linear-gradient(110deg, var(--teal-100), var(--pink-100));
+  color: var(--teal-900);
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 700;
@@ -143,7 +143,7 @@ section h3 {
   flex: 0 0 24px;
   place-items: center;
   border-radius: 50%;
-  background: var(--violet-700);
+  background: var(--teal-700);
   color: white;
   font-size: 1.1rem;
   line-height: 1;
@@ -163,7 +163,7 @@ section h3 {
 }
 
 .category-count {
-  color: var(--violet-700);
+  color: var(--teal-700);
   font-size: 0.72rem;
   letter-spacing: normal;
   text-transform: none;
@@ -190,7 +190,7 @@ section h3 {
 
 .activity-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(107, 33, 168, 0.1);
+  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.1);
 }
 
 .activity-card-full {
@@ -232,7 +232,7 @@ section h3 {
 
 .participants-section h6 {
   margin-bottom: 8px;
-  color: var(--violet-900);
+  color: var(--teal-900);
   font-size: 0.9rem;
 }
 
@@ -269,14 +269,14 @@ section h3 {
 .form-group label {
   display: block;
   margin-bottom: 6px;
-  color: var(--violet-900);
+  color: var(--teal-900);
   font-weight: 600;
 }
 
 .form-group input {
   width: 100%;
   padding: 11px;
-  border: 1px solid #d8c8df;
+  border: 1px solid #c8dcda;
   border-radius: 6px;
   background-color: #fff;
   color: var(--ink);
@@ -305,7 +305,7 @@ section h3 {
   padding: 0;
   background: transparent;
   box-shadow: none;
-  color: var(--violet-700);
+  color: var(--teal-700);
 }
 
 .back-button:hover {
@@ -325,11 +325,11 @@ section h3 {
   display: flex;
   align-items: center;
   padding: 10px;
-  border: 1px solid #d8c8df;
+  border: 1px solid #c8dcda;
   border-left: 0;
   border-radius: 0 6px 6px 0;
-  background-color: var(--violet-100);
-  color: var(--violet-700);
+  background-color: var(--teal-100);
+  color: var(--teal-700);
   font-size: 16px;
   white-space: nowrap;
 }
@@ -338,8 +338,8 @@ button {
   border: none;
   border-radius: 7px;
   padding: 11px 20px;
-  background: linear-gradient(110deg, var(--violet-700), var(--pink-600));
-  box-shadow: 0 5px 12px rgba(126, 34, 206, 0.2);
+  background: linear-gradient(110deg, var(--teal-700), var(--pink-600));
+  box-shadow: 0 5px 12px rgba(15, 118, 110, 0.2);
   color: white;
   cursor: pointer;
   font-size: 16px;
@@ -350,7 +350,7 @@ button {
 }
 
 button:hover {
-  box-shadow: 0 7px 16px rgba(126, 34, 206, 0.3);
+  box-shadow: 0 7px 16px rgba(15, 118, 110, 0.3);
   transform: translateY(-1px);
 }
 
