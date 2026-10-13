@@ -1,8 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
-  const activitySelect = document.getElementById("activity");
+  const activitiesContainer = document.getElementById("activities-container");
+  const signupContainer = document.getElementById("signup-container");
+  const activityInput = document.getElementById("activity");
+  const selectedActivityName = document.getElementById(
+    "selected-activity-name"
+  );
+  const emailInput = document.getElementById("email");
+  const backButton = document.getElementById("back-to-activities");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+
+  function showRegistration(activityName) {
+    activityInput.value = activityName;
+    selectedActivityName.textContent = activityName;
+    messageDiv.classList.add("hidden");
+    activitiesContainer.classList.add("hidden");
+    signupContainer.classList.remove("hidden");
+    emailInput.focus();
+  }
+
+  function showActivities() {
+    signupForm.reset();
+    activityInput.value = "";
+    signupContainer.classList.add("hidden");
+    activitiesContainer.classList.remove("hidden");
+  }
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -17,8 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Clear loading message
       activitiesList.innerHTML = "";
-      activitySelect.innerHTML =
-        '<option value="">-- Select an activity --</option>';
 
       const activitiesByCategory = Object.entries(activities).reduce(
         (categories, activity) => {
@@ -56,9 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const categoryContent = document.createElement("div");
           categoryContent.className = "category-content";
 
-          const selectGroup = document.createElement("optgroup");
-          selectGroup.label = category;
-
           categoryActivities.forEach(([name, details]) => {
             const activityCard = document.createElement("article");
             activityCard.className = "activity-card";
@@ -72,6 +90,18 @@ document.addEventListener("DOMContentLoaded", () => {
               <p><strong>Schedule:</strong> ${details.schedule}</p>
               <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
             `;
+
+            const registerButton = document.createElement("button");
+            registerButton.type = "button";
+            registerButton.className = "register-button";
+            registerButton.textContent = "Register";
+            registerButton.addEventListener("click", (event) => {
+              event.stopPropagation();
+              showRegistration(name);
+            });
+            activityCard.addEventListener("click", () => {
+              showRegistration(name);
+            });
 
             const participantsSection = document.createElement("div");
             participantsSection.className = "participants-section";
@@ -99,17 +129,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             activityCard.appendChild(participantsSection);
+            activityCard.appendChild(registerButton);
             categoryContent.appendChild(activityCard);
-
-            const option = document.createElement("option");
-            option.value = name;
-            option.textContent = name;
-            selectGroup.appendChild(option);
           });
 
           categorySection.appendChild(categoryContent);
           activitiesList.appendChild(categorySection);
-          activitySelect.appendChild(selectGroup);
         }
       );
     } catch (error) {
@@ -124,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const emailUsername = document.getElementById("email").value.trim();
     const email = `${emailUsername}@mergington.edu`;
-    const activity = document.getElementById("activity").value;
+    const activity = activityInput.value;
 
     try {
       const response = await fetch(
@@ -159,6 +184,8 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error signing up:", error);
     }
   });
+
+  backButton.addEventListener("click", showActivities);
 
   // Initialize app
   fetchActivities();
