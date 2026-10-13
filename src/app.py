@@ -13,6 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 import os  # Builds a platform-independent path to the static directory.
 from pathlib import Path  # Locates files relative to this Python module.
+from threading import Lock
 
 # Create the API application and expose descriptive metadata in its generated docs.
 app = FastAPI(title="Mergington High School API",
@@ -92,6 +93,7 @@ activities = {
         "participants": ["benjamin@mergington.edu", "evelyn@mergington.edu"]
     }
 }
+activities_lock = Lock()
 
 
 # Route requests for the site root to the static frontend rather than returning API data.
@@ -134,18 +136,25 @@ def signup_for_activity(
     # Keep a reference to the selected record so its participant list can be updated.
     activity = activities[activity_name]
 
-    # Restrict registration to students using the school's email domain.
-    if not email.endswith("@mergington.edu"):
+    # Require one non-empty, whitespace-free username and the exact school domain.
+    username, separator, domain = email.partition("@")
+    if (
+        not separator
+        or not username
+        or domain != "mergington.edu"
+        or any(character.isspace() for character in email)
+    ):
         raise HTTPException(status_code=400, detail="Invalid email domain")
 
-    # Prevent duplicate registrations for the same student and activity.
-    if email in activity["participants"]:
-        raise HTTPException(status_code=400, detail="Student is already signed up")
+    with activities_lock:
+        # Prevent duplicate registrations for the same student and activity.
+        if email in activity["participants"]:
+            raise HTTPException(status_code=400, detail="Student is already signed up")
 
-    if len(activity["participants"]) >= activity["max_participants"]:
-        raise HTTPException(status_code=400, detail="Activity is full")
+        if len(activity["participants"]) >= activity["max_participants"]:
+            raise HTTPException(status_code=400, detail="Activity is full")
 
-    # Mutate the in-memory list, making the registration visible to later API requests.
-    activity["participants"].append(email)
+        # Mutate the in-memory list, making the registration visible to later API requests.
+        activity["participants"].append(email)
     # Confirm the successful registration with a human-readable response.
     return {"message": f"Signed up {email} for {activity_name}"}
