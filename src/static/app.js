@@ -20,54 +20,98 @@ document.addEventListener("DOMContentLoaded", () => {
       activitySelect.innerHTML =
         '<option value="">-- Select an activity --</option>';
 
-      // Populate activities list
-      Object.entries(activities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
+      const activitiesByCategory = Object.entries(activities).reduce(
+        (categories, activity) => {
+          const category = activity[1].category || "Other Activities";
+          if (!categories[category]) {
+            categories[category] = [];
+          }
+          categories[category].push(activity);
+          return categories;
+        },
+        {}
+      );
 
-        const spotsLeft = details.max_participants - details.participants.length;
+      Object.entries(activitiesByCategory).forEach(
+        ([category, categoryActivities]) => {
+          const categorySection = document.createElement("details");
+          categorySection.className = "activity-category";
+          categorySection.open = true;
 
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-        `;
+          const categoryHeading = document.createElement("summary");
+          categoryHeading.className = "category-heading";
 
-        const participantsSection = document.createElement("div");
-        participantsSection.className = "participants-section";
+          const categoryName = document.createElement("span");
+          categoryName.textContent = category;
 
-        const participantsHeading = document.createElement("h5");
-        participantsHeading.textContent = `Registered students (${details.participants.length})`;
-        participantsSection.appendChild(participantsHeading);
+          const activityCount = document.createElement("span");
+          activityCount.className = "category-count";
+          activityCount.textContent = `${categoryActivities.length} ${
+            categoryActivities.length === 1 ? "activity" : "activities"
+          }`;
 
-        if (details.participants.length > 0) {
-          const participantsList = document.createElement("ul");
-          participantsList.className = "participants-list";
+          categoryHeading.append(categoryName, activityCount);
+          categorySection.appendChild(categoryHeading);
 
-          details.participants.forEach((email) => {
-            const participant = document.createElement("li");
-            participant.textContent = email;
-            participantsList.appendChild(participant);
+          const categoryContent = document.createElement("div");
+          categoryContent.className = "category-content";
+
+          const selectGroup = document.createElement("optgroup");
+          selectGroup.label = category;
+
+          categoryActivities.forEach(([name, details]) => {
+            const activityCard = document.createElement("article");
+            activityCard.className = "activity-card";
+
+            const spotsLeft =
+              details.max_participants - details.participants.length;
+
+            activityCard.innerHTML = `
+              <h5>${name}</h5>
+              <p>${details.description}</p>
+              <p><strong>Schedule:</strong> ${details.schedule}</p>
+              <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+            `;
+
+            const participantsSection = document.createElement("div");
+            participantsSection.className = "participants-section";
+
+            const participantsHeading = document.createElement("h6");
+            participantsHeading.textContent = `Registered students (${details.participants.length})`;
+            participantsSection.appendChild(participantsHeading);
+
+            if (details.participants.length > 0) {
+              const participantsList = document.createElement("ul");
+              participantsList.className = "participants-list";
+
+              details.participants.forEach((email) => {
+                const participant = document.createElement("li");
+                participant.textContent = email;
+                participantsList.appendChild(participant);
+              });
+
+              participantsSection.appendChild(participantsList);
+            } else {
+              const emptyMessage = document.createElement("p");
+              emptyMessage.className = "participants-empty";
+              emptyMessage.textContent = "No students are registered yet.";
+              participantsSection.appendChild(emptyMessage);
+            }
+
+            activityCard.appendChild(participantsSection);
+            categoryContent.appendChild(activityCard);
+
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            selectGroup.appendChild(option);
           });
 
-          participantsSection.appendChild(participantsList);
-        } else {
-          const emptyMessage = document.createElement("p");
-          emptyMessage.className = "participants-empty";
-          emptyMessage.textContent = "No students are registered yet.";
-          participantsSection.appendChild(emptyMessage);
+          categorySection.appendChild(categoryContent);
+          activitiesList.appendChild(categorySection);
+          activitySelect.appendChild(selectGroup);
         }
-
-        activityCard.appendChild(participantsSection);
-        activitiesList.appendChild(activityCard);
-
-        // Add option to select dropdown
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        activitySelect.appendChild(option);
-      });
+      );
     } catch (error) {
       activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
       console.error("Error fetching activities:", error);

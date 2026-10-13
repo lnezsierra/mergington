@@ -22,54 +22,63 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
 # In-memory activity database
 activities = {
     "Chess Club": {
+        "category": "Academic & Enrichment",
         "description": "Learn strategies and compete in chess tournaments",
         "schedule": "Fridays, 3:30 PM - 5:00 PM",
         "max_participants": 12,
         "participants": ["michael@mergington.edu", "daniel@mergington.edu"]
     },
     "Programming Class": {
+        "category": "Academic & Enrichment",
         "description": "Learn programming fundamentals and build software projects",
         "schedule": "Tuesdays and Thursdays, 3:30 PM - 4:30 PM",
         "max_participants": 20,
         "participants": ["emma@mergington.edu", "sophia@mergington.edu"]
     },
     "Gym Class": {
+        "category": "Athletics",
         "description": "Physical education and sports activities",
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
     },
     "Debate Club": {
+        "category": "Academic & Enrichment",
         "description": "Develop critical thinking and public speaking skills",
         "schedule": "Wednesdays, 3:30 PM - 5:00 PM",
         "max_participants": 16,
         "participants": ["liam@mergington.edu", "ava@mergington.edu"]
     },
     "Soccer Team": {
+        "category": "Athletics",
         "description": "Practice soccer skills and compete in school matches",
         "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
         "max_participants": 22,
         "participants": ["noah@mergington.edu", "mia@mergington.edu"]
     },
     "Basketball Team": {
+        "category": "Athletics",
         "description": "Build basketball skills and participate in team competitions",
         "schedule": "Mondays and Wednesdays, 4:00 PM - 5:30 PM",
         "max_participants": 15,
         "participants": ["ethan@mergington.edu", "isabella@mergington.edu"]
     },
     "Art Club": {
+        "category": "Arts & Culture",
         "description": "Explore drawing, painting, and mixed-media art",
         "schedule": "Mondays, 3:30 PM - 5:00 PM",
         "max_participants": 18,
         "participants": ["lucas@mergington.edu", "amelia@mergington.edu"]
     },
     "Drama Club": {
+        "category": "Arts & Culture",
         "description": "Learn acting, stagecraft, and theatrical performance",
         "schedule": "Tuesdays, 3:30 PM - 5:30 PM",
         "max_participants": 20,
         "participants": ["james@mergington.edu", "harper@mergington.edu"]
     },
     "Music Ensemble": {
+        "category": "Arts & Culture",
         "description": "Practice and perform music as a student ensemble",
         "schedule": "Thursdays, 3:30 PM - 5:00 PM",
         "max_participants": 24,
